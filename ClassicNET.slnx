@@ -1,4 +1,5 @@
 <Solution>
-  <Project Path="WebAPI/WebAPI.csproj" />
-  <Project Path="WebMVC/WebMVC.csproj" />
+  <Project Path="WebAPI.Tests/WebAPI.Tests.csproj" Id="de947275-7b8b-4276-9777-a54204cb2020" />
+  <Project Path="WebAPI/WebAPI.csproj" Id="4005a37b-0f81-4ca1-b4ef-b9d2a8d2592c" />
+  <Project Path="WebMVC/WebMVC.csproj" Id="034d7562-9962-428b-b862-dd15df5352f5" />
 </Solution>
