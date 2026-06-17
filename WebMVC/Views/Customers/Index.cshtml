@@ -1,0 +1,56 @@
+﻿@model IEnumerable<WebMVC.Models.Customer>
+
+@{
+    ViewBag.Title = "Customers";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Customers</h2>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.CompanyName)</th>
+                        <th>@Html.DisplayNameFor(model => model.ContactName)</th>
+                        <th>@Html.DisplayNameFor(model => model.ContactTitle)</th>
+                        <th>@Html.DisplayNameFor(model => model.Address)</th>
+                        <th>@Html.DisplayNameFor(model => model.City)</th>
+                        <th>@Html.DisplayNameFor(model => model.Region)</th>
+                        <th>@Html.DisplayNameFor(model => model.PostalCode)</th>
+                        <th>@Html.DisplayNameFor(model => model.Country)</th>
+                        <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                        <th>@Html.DisplayNameFor(model => model.Fax)</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.CompanyName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ContactName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ContactTitle)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                            <td>@Html.DisplayFor(modelItem => item.City)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Region)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PostalCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Country)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Fax)</td>
+                            <td class="text-end text-nowrap">
+                                @Html.ActionLink("Edit", "Edit", new { id = item.CustomerID }, new { @class = "btn btn-sm btn-outline-primary me-1" })
+                                @Html.ActionLink("Details", "Details", new { id = item.CustomerID }, new { @class = "btn btn-sm btn-outline-secondary me-1" })
+                                @Html.ActionLink("Delete", "Delete", new { id = item.CustomerID }, new { @class = "btn btn-sm btn-outline-danger" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

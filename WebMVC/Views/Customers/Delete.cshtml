@@ -1,0 +1,71 @@
+﻿@model WebMVC.Models.Customer
+
+@{
+    ViewBag.Title = "Delete Customer";
+}
+
+<h2 class="mb-4">Delete Customer</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="alert alert-warning" role="alert">
+            Are you sure you want to delete this customer?
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="text-muted" style="width: 30%;">@Html.DisplayNameFor(model => model.CompanyName)</th>
+                            <td>@Html.DisplayFor(model => model.CompanyName)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ContactName)</th>
+                            <td>@Html.DisplayFor(model => model.ContactName)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ContactTitle)</th>
+                            <td>@Html.DisplayFor(model => model.ContactTitle)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Address)</th>
+                            <td>@Html.DisplayFor(model => model.Address)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.City)</th>
+                            <td>@Html.DisplayFor(model => model.City)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Region)</th>
+                            <td>@Html.DisplayFor(model => model.Region)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.PostalCode)</th>
+                            <td>@Html.DisplayFor(model => model.PostalCode)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Country)</th>
+                            <td>@Html.DisplayFor(model => model.Country)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Phone)</th>
+                            <td>@Html.DisplayFor(model => model.Phone)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Fax)</th>
+                            <td>@Html.DisplayFor(model => model.Fax)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-transparent">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" class="btn btn-danger me-2" />
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-secondary" })
+                }
+            </div>
+        </div>
+    </div>
+</div>
