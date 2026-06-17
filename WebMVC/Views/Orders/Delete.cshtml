@@ -1,0 +1,83 @@
+@model WebMVC.Models.Order
+
+@{
+    ViewBag.Title = "Delete Order";
+}
+
+<h2 class="mb-4">Delete Order</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="alert alert-warning" role="alert">
+            Are you sure you want to delete this order?
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="text-muted" style="width: 30%;">@Html.DisplayNameFor(model => model.CustomerID)</th>
+                            <td>@Html.DisplayFor(model => model.CustomerID)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.EmployeeID)</th>
+                            <td>@Html.DisplayFor(model => model.EmployeeID)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.OrderDate)</th>
+                            <td>@Html.DisplayFor(model => model.OrderDate)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.RequiredDate)</th>
+                            <td>@Html.DisplayFor(model => model.RequiredDate)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShippedDate)</th>
+                            <td>@Html.DisplayFor(model => model.ShippedDate)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipVia)</th>
+                            <td>@Html.DisplayFor(model => model.ShipVia)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Freight)</th>
+                            <td>@Html.DisplayFor(model => model.Freight)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipName)</th>
+                            <td>@Html.DisplayFor(model => model.ShipName)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipAddress)</th>
+                            <td>@Html.DisplayFor(model => model.ShipAddress)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipCity)</th>
+                            <td>@Html.DisplayFor(model => model.ShipCity)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipRegion)</th>
+                            <td>@Html.DisplayFor(model => model.ShipRegion)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipPostalCode)</th>
+                            <td>@Html.DisplayFor(model => model.ShipPostalCode)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.ShipCountry)</th>
+                            <td>@Html.DisplayFor(model => model.ShipCountry)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-transparent">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" class="btn btn-danger me-2" />
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-secondary" })
+                }
+            </div>
+        </div>
+    </div>
+</div>
