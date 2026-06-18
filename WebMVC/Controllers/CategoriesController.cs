@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -48,8 +49,9 @@ namespace WebMVC.Controllers
             return View(categories);
         }
 
-        // Base address of the WebAPI Categories endpoint.
-        private const string ApiCategoriesUrl = "https://localhost:44362/api/Categories";
+        // Base address of the WebAPI Categories endpoint (configured in Web.config appSettings).
+        private static readonly string ApiCategoriesUrl =
+            ConfigurationManager.AppSettings["ApiCategoriesUrl"];
 
         // GET: Categories/ApiIndex
         // Shows categories fetched from the WebAPI project instead of the local database.
@@ -58,6 +60,12 @@ namespace WebMVC.Controllers
             if (page < 1)
             {
                 page = 1;
+            }
+
+            if (string.IsNullOrWhiteSpace(ApiCategoriesUrl))
+            {
+                ViewBag.ApiError = "The 'ApiCategoriesUrl' app setting is not configured in Web.config.";
+                return View(new List<Category>());
             }
 
             // Allow the self-signed IIS Express dev certificate on localhost.
