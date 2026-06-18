@@ -17,10 +17,35 @@ namespace WebMVC.Controllers
     {
         private MVCNetEntities db = new MVCNetEntities();
 
+        // Number of categories shown per page on the Index view.
+        private const int PageSize = 2;
+
         // GET: Categories
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
-            return View(db.Categories.ToList());
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+            int totalItems = db.Categories.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)PageSize);
+
+            if (totalPages > 0 && page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var categories = db.Categories
+                .OrderBy(c => c.CategoryName)
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(categories);
         }
 
         // Base address of the WebAPI Categories endpoint.
