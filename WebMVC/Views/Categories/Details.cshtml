@@ -1,0 +1,32 @@
+@model WebMVC.Models.Category
+
+@{
+    ViewBag.Title = "Category Details";
+}
+
+<h2 class="mb-4">Category Details</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="text-muted" style="width: 30%;">@Html.DisplayNameFor(model => model.CategoryName)</th>
+                            <td>@Html.DisplayFor(model => model.CategoryName)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">@Html.DisplayNameFor(model => model.Description)</th>
+                            <td>@Html.DisplayFor(model => model.Description)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-transparent">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.CategoryID }, new { @class = "btn btn-primary me-2" })
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-outline-secondary" })
+            </div>
+        </div>
+    </div>
+</div>
