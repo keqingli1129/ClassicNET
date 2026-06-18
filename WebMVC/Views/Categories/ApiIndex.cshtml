@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "Categories from API";
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -47,4 +49,26 @@ else
             </div>
         </div>
     </div>
+
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Categories from API pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    @Html.ActionLink("Previous", "ApiIndex", new { page = currentPage - 1 }, new { @class = "page-link" })
+                </li>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        @Html.ActionLink(i.ToString(), "ApiIndex", new { page = i }, new { @class = "page-link" })
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    @Html.ActionLink("Next", "ApiIndex", new { page = currentPage + 1 }, new { @class = "page-link" })
+                </li>
+            </ul>
+        </nav>
+    }
 }

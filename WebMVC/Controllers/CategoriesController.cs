@@ -53,8 +53,13 @@ namespace WebMVC.Controllers
 
         // GET: Categories/ApiIndex
         // Shows categories fetched from the WebAPI project instead of the local database.
-        public async Task<ActionResult> ApiIndex()
+        public async Task<ActionResult> ApiIndex(int page = 1)
         {
+            if (page < 1)
+            {
+                page = 1;
+            }
+
             // Allow the self-signed IIS Express dev certificate on localhost.
             var handler = new HttpClientHandler
             {
@@ -67,7 +72,10 @@ namespace WebMVC.Controllers
                 {
                     client.Timeout = TimeSpan.FromSeconds(10);
 
-                    var response = await client.GetAsync(ApiCategoriesUrl);
+                    var requestUrl = string.Format("{0}?page={1}&pageSize={2}",
+                        ApiCategoriesUrl, page, PageSize);
+
+                    var response = await client.GetAsync(requestUrl);
                     if (!response.IsSuccessStatusCode)
                     {
                         ViewBag.ApiError = string.Format(
@@ -77,9 +85,28 @@ namespace WebMVC.Controllers
                     }
 
                     var json = await response.Content.ReadAsStringAsync();
-                    var categories = JsonConvert.DeserializeObject<List<Category>>(json)
-                                     ?? new List<Category>();
-                    return View(categories);
+
+                    // Shape of the paged envelope returned by the WebAPI.
+                    var template = new
+                    {
+                        items = new List<Category>(),
+                        page = 1,
+                        pageSize = PageSize,
+                        totalCount = 0,
+                        totalPages = 0
+                    };
+                    var result = JsonConvert.DeserializeAnonymousType(json, template);
+
+                    if (result == null)
+                    {
+                        ViewBag.ApiError = "The API response could not be parsed.";
+                        return View(new List<Category>());
+                    }
+
+                    ViewBag.CurrentPage = result.page;
+                    ViewBag.TotalPages = result.totalPages;
+
+                    return View(result.items ?? new List<Category>());
                 }
             }
             catch (TaskCanceledException)

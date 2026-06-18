@@ -17,10 +17,40 @@ namespace WebAPI.Controllers
     {
         private MVCNetEntities db = new MVCNetEntities();
 
-        // GET: api/Categories
-        public IQueryable<Category> GetCategories()
+        // GET: api/Categories?page=1&pageSize=10
+        public IHttpActionResult GetCategories(int page = 1, int pageSize = 10)
         {
-            return db.Categories;
+            if (page < 1)
+            {
+                page = 1;
+            }
+            if (pageSize < 1)
+            {
+                pageSize = 10;
+            }
+
+            int totalCount = db.Categories.Count();
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            if (totalPages > 0 && page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var items = db.Categories
+                .OrderBy(c => c.CategoryName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return Ok(new
+            {
+                items,
+                page,
+                pageSize,
+                totalCount,
+                totalPages
+            });
         }
 
         // GET: api/Categories/5
