@@ -4,8 +4,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers
@@ -18,6 +21,58 @@ namespace WebMVC.Controllers
         public ActionResult Index()
         {
             return View(db.Categories.ToList());
+        }
+
+        // Base address of the WebAPI Categories endpoint.
+        private const string ApiCategoriesUrl = "https://localhost:44362/api/Categories";
+
+        // GET: Categories/ApiIndex
+        // Shows categories fetched from the WebAPI project instead of the local database.
+        public async Task<ActionResult> ApiIndex()
+        {
+            // Allow the self-signed IIS Express dev certificate on localhost.
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (msg, cert, chain, errors) => true
+            };
+
+            try
+            {
+                using (var client = new HttpClient(handler))
+                {
+                    client.Timeout = TimeSpan.FromSeconds(10);
+
+                    var response = await client.GetAsync(ApiCategoriesUrl);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        ViewBag.ApiError = string.Format(
+                            "The API returned {0} ({1}). Make sure the WebAPI project is running.",
+                            (int)response.StatusCode, response.ReasonPhrase);
+                        return View(new List<Category>());
+                    }
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var categories = JsonConvert.DeserializeObject<List<Category>>(json)
+                                     ?? new List<Category>();
+                    return View(categories);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                ViewBag.ApiError = "The request to the API timed out. Make sure the WebAPI project is running.";
+                return View(new List<Category>());
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.ApiError = "Could not reach the API: " + ex.Message
+                    + " Make sure the WebAPI project is running.";
+                return View(new List<Category>());
+            }
+            catch (JsonException ex)
+            {
+                ViewBag.ApiError = "The API response could not be parsed: " + ex.Message;
+                return View(new List<Category>());
+            }
         }
 
         // GET: Categories/Details/5
