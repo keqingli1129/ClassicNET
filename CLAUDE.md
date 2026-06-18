@@ -34,3 +34,8 @@ Run the web projects via IIS Express from Visual Studio (no `dotnet run`).
 ## CI
 
 `azure-pipelines.yml` builds on `windows-latest`: NuGet restore → VSBuild (packaged web deploy) → VSTest, triggered on `main`. Note its `solution` variable is `'**/*.sln'`, which does **not** match the `.slnx` file — keep this in mind if pipeline changes are requested.
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->
