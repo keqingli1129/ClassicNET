@@ -64,7 +64,9 @@ namespace WebAPI.Controllers
         [ResponseType(typeof(Category))]
         public async Task<IHttpActionResult> GetCategory(int id)
         {
-            Category category = await db.Categories.FindAsync(id);
+            Category category = await db.Categories
+                .Include(c => c.Products)
+                .FirstOrDefaultAsync(c => c.CategoryID == id);
             if (category == null)
             {
                 return NotFound();
