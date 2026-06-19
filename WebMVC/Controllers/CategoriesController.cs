@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Shared.Contracts.DTOs;
 using WebMVC.Models;
 
 namespace WebMVC.Controllers
@@ -65,7 +66,7 @@ namespace WebMVC.Controllers
             if (string.IsNullOrWhiteSpace(ApiCategoriesUrl))
             {
                 ViewBag.ApiError = "The 'ApiCategoriesUrl' app setting is not configured in Web.config.";
-                return View(new List<Category>());
+                return View(new List<CategoryDto>());
             }
 
             // Allow the self-signed IIS Express dev certificate on localhost.
@@ -89,7 +90,7 @@ namespace WebMVC.Controllers
                         ViewBag.ApiError = string.Format(
                             "The API returned {0} ({1}). Make sure the WebAPI project is running.",
                             (int)response.StatusCode, response.ReasonPhrase);
-                        return View(new List<Category>());
+                        return View(new List<CategoryDto>());
                     }
 
                     var json = await response.Content.ReadAsStringAsync();
@@ -97,7 +98,7 @@ namespace WebMVC.Controllers
                     // Shape of the paged envelope returned by the WebAPI.
                     var template = new
                     {
-                        items = new List<Category>(),
+                        items = new List<CategoryDto>(),
                         page = 1,
                         pageSize = PageSize,
                         totalCount = 0,
@@ -108,30 +109,30 @@ namespace WebMVC.Controllers
                     if (result == null)
                     {
                         ViewBag.ApiError = "The API response could not be parsed.";
-                        return View(new List<Category>());
+                        return View(new List<CategoryDto>());
                     }
 
                     ViewBag.CurrentPage = result.page;
                     ViewBag.TotalPages = result.totalPages;
 
-                    return View(result.items ?? new List<Category>());
+                    return View(result.items ?? new List<CategoryDto>());
                 }
             }
             catch (TaskCanceledException)
             {
                 ViewBag.ApiError = "The request to the API timed out. Make sure the WebAPI project is running.";
-                return View(new List<Category>());
+                return View(new List<CategoryDto>());
             }
             catch (HttpRequestException ex)
             {
                 ViewBag.ApiError = "Could not reach the API: " + ex.Message
                     + " Make sure the WebAPI project is running.";
-                return View(new List<Category>());
+                return View(new List<CategoryDto>());
             }
             catch (JsonException ex)
             {
                 ViewBag.ApiError = "The API response could not be parsed: " + ex.Message;
-                return View(new List<Category>());
+                return View(new List<CategoryDto>());
             }
         }
 

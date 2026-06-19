@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Shared.Contracts.DTOs;
+using WebAPI.Mapping;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -48,7 +50,8 @@ namespace WebAPI.Controllers
                 .OrderBy(c => c.CategoryName)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+                .ToList()
+                .ToDtoList();
 
             return Ok(new
             {
@@ -61,7 +64,7 @@ namespace WebAPI.Controllers
         }
 
         // GET: api/Categories/5
-        [ResponseType(typeof(Category))]
+        [ResponseType(typeof(CategoryDto))]
         public async Task<IHttpActionResult> GetCategory(int id)
         {
             Category category = await db.Categories
@@ -72,7 +75,7 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(category);
+            return Ok(category.ToDto());
         }
 
         // PUT: api/Categories/5

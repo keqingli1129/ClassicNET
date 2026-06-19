@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net481</TargetFramework>
+	<RootNamespace>Shared.Contracts</RootNamespace>
+	<AssemblyName>Shared.Contracts</AssemblyName>
+  </PropertyGroup>
+
+</Project>
