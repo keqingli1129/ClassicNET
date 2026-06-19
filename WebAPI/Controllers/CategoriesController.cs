@@ -15,7 +15,14 @@ namespace WebAPI.Controllers
 {
     public class CategoriesController : ApiController
     {
-        private MVCNetEntities db = new MVCNetEntities();
+        private MVCNetEntities db;
+
+        public CategoriesController()
+        {
+            db = new MVCNetEntities();
+            db.Configuration.ProxyCreationEnabled = false;
+            db.Configuration.LazyLoadingEnabled = false;
+        }
 
         // GET: api/Categories?page=1&pageSize=10
         public IHttpActionResult GetCategories(int page = 1, int pageSize = 10)
