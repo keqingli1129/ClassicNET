@@ -26,7 +26,7 @@ namespace WebAPI.Mapping
                 CategoryName = category.CategoryName,
                 Description = category.Description,
                 Picture = category.Picture,
-                Products = category.Products?.Select(p => p.ToDto()).ToList()
+                Products = category.Products?.ToDtoList()
             };
         }
 
@@ -41,6 +41,19 @@ namespace WebAPI.Mapping
             }
 
             return categories.Select(c => c.ToDto()).ToList();
+        }
+
+        /// <summary>
+        /// Maps a collection of <see cref="Product"/> entities to a list of <see cref="ProductDto"/>.
+        /// </summary>
+        public static List<ProductDto> ToDtoList(this IEnumerable<Product> products)
+        {
+            if (products == null)
+            {
+                return new List<ProductDto>();
+            }
+
+            return products.Select(p => p.ToDto()).ToList();
         }
 
         /// <summary>

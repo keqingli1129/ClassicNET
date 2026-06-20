@@ -47,6 +47,7 @@ namespace WebAPI.Controllers
             }
 
             var items = db.Categories
+                .Include(c => c.Products)
                 .OrderBy(c => c.CategoryName)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
