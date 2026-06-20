@@ -15,9 +15,21 @@ namespace WebMVC.Controllers
         private MVCNetEntities db = new MVCNetEntities();
 
         // GET: Orders
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            return View(db.Orders.ToList());
+            var query = db.Orders.OrderBy(o => o.OrderID);
+            int totalItems = query.Count();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            page = Math.Max(1, Math.Min(page, totalPages));
+
+            var orders = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+
+            return View(orders);
         }
 
         // GET: Orders/Details/5
