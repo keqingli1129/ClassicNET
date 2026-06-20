@@ -152,6 +152,9 @@
     <Compile Include="Models\Customer.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerCustomerDemo.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerDemographic.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>

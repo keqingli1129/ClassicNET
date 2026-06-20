@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MVCNetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MVCNetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="CategoryID" />
@@ -17,16 +17,15 @@
         <EntityType Name="CustomerCustomerDemo">
           <Key>
             <PropertyRef Name="CustomerID" />
-            <PropertyRef Name="CustomerTypeID" />
           </Key>
           <Property Name="CustomerID" Type="nchar" MaxLength="5" Nullable="false" />
-          <Property Name="CustomerTypeID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="CustomerTypeID" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomerDemographics">
           <Key>
             <PropertyRef Name="CustomerTypeID" />
           </Key>
-          <Property Name="CustomerTypeID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="CustomerTypeID" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="CustomerDesc" Type="ntext" />
         </EntityType>
         <EntityType Name="Customers">
@@ -44,6 +43,7 @@
           <Property Name="Country" Type="nvarchar" MaxLength="15" />
           <Property Name="Phone" Type="nvarchar" MaxLength="24" />
           <Property Name="Fax" Type="nvarchar" MaxLength="24" />
+          <Property Name="CustomTypeID" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Employees">
           <Key>
@@ -126,7 +126,7 @@
             <PropertyRef Name="RegionID" />
           </Key>
           <Property Name="RegionID" Type="int" Nullable="false" />
-          <Property Name="RegionDescription" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="RegionDescription" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Shippers">
           <Key>
@@ -345,14 +345,6 @@ warning 6002: The table/view 'MVCNet.dbo.Products by Category' does not have a p
           <Property Name="Discontinued" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'MVCNet.dbo.Quarterly Orders' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Quarterly Orders">
-          <Property Name="CustomerID" Type="nchar" MaxLength="5" />
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="40" />
-          <Property Name="City" Type="nvarchar" MaxLength="15" />
-          <Property Name="Country" Type="nvarchar" MaxLength="15" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'MVCNet.dbo.Sales by Category' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Sales by Category">
           <Key>
@@ -397,7 +389,7 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
           <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="Subtotal" Type="money" />
         </EntityType>
-        <Association Name="FK_CustomerCustomerDemo">
+        <Association Name="FK_CustomerCustomerDemo_CustomerDemographics">
           <End Role="CustomerDemographics" Type="Self.CustomerDemographics" Multiplicity="1" />
           <End Role="CustomerCustomerDemo" Type="Self.CustomerCustomerDemo" Multiplicity="*" />
           <ReferentialConstraint>
@@ -406,18 +398,6 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
             </Principal>
             <Dependent Role="CustomerCustomerDemo">
               <PropertyRef Name="CustomerTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CustomerCustomerDemo_Customers">
-          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
-          <End Role="CustomerCustomerDemo" Type="Self.CustomerCustomerDemo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="CustomerID" />
-            </Principal>
-            <Dependent Role="CustomerCustomerDemo">
-              <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -747,12 +727,8 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
     [Summary of Sales by Year].[Subtotal] AS [Subtotal]
     FROM [dbo].[Summary of Sales by Year] AS [Summary of Sales by Year]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_CustomerCustomerDemo" Association="Self.FK_CustomerCustomerDemo">
+          <AssociationSet Name="FK_CustomerCustomerDemo_CustomerDemographics" Association="Self.FK_CustomerCustomerDemo_CustomerDemographics">
             <End Role="CustomerDemographics" EntitySet="CustomerDemographics" />
-            <End Role="CustomerCustomerDemo" EntitySet="CustomerCustomerDemo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CustomerCustomerDemo_Customers" Association="Self.FK_CustomerCustomerDemo_Customers">
-            <End Role="Customers" EntitySet="Customers" />
             <End Role="CustomerCustomerDemo" EntitySet="CustomerCustomerDemo" />
           </AssociationSet>
           <AssociationSet Name="FK_Employees_Employees" Association="Self.FK_Employees_Employees">
@@ -800,8 +776,7 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
             <End Role="Territories" EntitySet="Territories" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MVCNetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -814,14 +789,6 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
-        </EntityType>
-        <EntityType Name="CustomerDemographic">
-          <Key>
-            <PropertyRef Name="CustomerTypeID" />
-          </Key>
-          <Property Name="CustomerTypeID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="CustomerDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Customers" Relationship="Self.CustomerCustomerDemo" FromRole="CustomerDemographics" ToRole="Customers" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -839,7 +806,7 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
           <Property Name="Phone" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
           <Property Name="Fax" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
-          <NavigationProperty Name="CustomerDemographics" Relationship="Self.CustomerCustomerDemo" FromRole="Customers" ToRole="CustomerDemographics" />
+          <Property Name="CustomTypeID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -922,14 +889,6 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
           <NavigationProperty Name="Order_Details" Relationship="Self.FK_Order_Details_Products" FromRole="Products" ToRole="Order_Details" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_Products_Suppliers" FromRole="Products" ToRole="Suppliers" />
         </EntityType>
-        <EntityType Name="Region">
-          <Key>
-            <PropertyRef Name="RegionID" />
-          </Key>
-          <Property Name="RegionID" Type="Int32" Nullable="false" />
-          <Property Name="RegionDescription" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Territories" Relationship="Self.FK_Territories_Region" FromRole="Region" ToRole="Territories" />
-        </EntityType>
         <EntityType Name="Shipper">
           <Key>
             <PropertyRef Name="ShipperID" />
@@ -964,8 +923,8 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
           <Property Name="TerritoryID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TerritoryDescription" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="RegionID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Region" Relationship="Self.FK_Territories_Region" FromRole="Territories" ToRole="Region" />
           <NavigationProperty Name="Employees" Relationship="Self.EmployeeTerritories" FromRole="Territories" ToRole="Employees" />
+          <NavigationProperty Name="Region" Relationship="MVCNetModel.FK_Territories_Region" FromRole="Territory" ToRole="Region" />
         </EntityType>
         <EntityType Name="Alphabetical_list_of_product">
           <Key>
@@ -1261,35 +1220,17 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Territories_Region">
-          <End Role="Region" Type="Self.Region" Multiplicity="1" />
-          <End Role="Territories" Type="Self.Territory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Region">
-              <PropertyRef Name="RegionID" />
-            </Principal>
-            <Dependent Role="Territories">
-              <PropertyRef Name="RegionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="CustomerCustomerDemo">
-          <End Role="CustomerDemographics" Type="Self.CustomerDemographic" Multiplicity="*" />
-          <End Role="Customers" Type="Self.Customer" Multiplicity="*" />
-        </Association>
         <Association Name="EmployeeTerritories">
           <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
           <End Role="Territories" Type="Self.Territory" Multiplicity="*" />
         </Association>
         <EntityContainer Name="MVCNetEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categories" EntityType="Self.Category" />
-          <EntitySet Name="CustomerDemographics" EntityType="Self.CustomerDemographic" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
           <EntitySet Name="Order_Details" EntityType="Self.Order_Detail" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="Products" EntityType="Self.Product" />
-          <EntitySet Name="Regions" EntityType="Self.Region" />
           <EntitySet Name="Shippers" EntityType="Self.Shipper" />
           <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
           <EntitySet Name="Territories" EntityType="Self.Territory" />
@@ -1340,26 +1281,18 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
             <End Role="Suppliers" EntitySet="Suppliers" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Territories_Region" Association="Self.FK_Territories_Region">
-            <End Role="Region" EntitySet="Regions" />
-            <End Role="Territories" EntitySet="Territories" />
-          </AssociationSet>
-          <AssociationSet Name="CustomerCustomerDemo" Association="Self.CustomerCustomerDemo">
-            <End Role="CustomerDemographics" EntitySet="CustomerDemographics" />
-            <End Role="Customers" EntitySet="Customers" />
-          </AssociationSet>
           <AssociationSet Name="EmployeeTerritories" Association="Self.EmployeeTerritories">
             <End Role="Employees" EntitySet="Employees" />
             <End Role="Territories" EntitySet="Territories" />
           </AssociationSet>
           <FunctionImport Name="CustOrderHist" ReturnType="Collection(MVCNetModel.CustOrderHist_Result)">
-            <Parameter Name="CustomerID" Mode="In" Type="String" />
+          <Parameter Name="CustomerID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CustOrdersDetail" ReturnType="Collection(MVCNetModel.CustOrdersDetail_Result)">
-            <Parameter Name="OrderID" Mode="In" Type="Int32" />
+          <Parameter Name="OrderID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CustOrdersOrders" ReturnType="Collection(MVCNetModel.CustOrdersOrders_Result)">
-            <Parameter Name="CustomerID" Mode="In" Type="String" />
+          <Parameter Name="CustomerID" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Employee_Sales_by_Country" ReturnType="Collection(MVCNetModel.Employee_Sales_by_Country_Result)">
             <Parameter Name="Beginning_Date" Mode="In" Type="DateTime" />
@@ -1374,6 +1307,17 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
             <Parameter Name="OrdYear" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Ten_Most_Expensive_Products" ReturnType="Collection(MVCNetModel.Ten_Most_Expensive_Products_Result)" />
+          <EntitySet Name="CustomerCustomerDemoes" EntityType="MVCNetModel.CustomerCustomerDemo" />
+          <EntitySet Name="CustomerDemographics" EntityType="MVCNetModel.CustomerDemographic" />
+          <AssociationSet Name="FK_CustomerCustomerDemo_CustomerDemographics" Association="MVCNetModel.FK_CustomerCustomerDemo_CustomerDemographics">
+            <End Role="CustomerDemographic" EntitySet="CustomerDemographics" />
+            <End Role="CustomerCustomerDemo" EntitySet="CustomerCustomerDemoes" />
+          </AssociationSet>
+          <EntitySet Name="Regions" EntityType="MVCNetModel.Region" />
+          <AssociationSet Name="FK_Territories_Region" Association="MVCNetModel.FK_Territories_Region">
+            <End Role="Region" EntitySet="Regions" />
+            <End Role="Territory" EntitySet="Territories" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="CustOrderHist_Result">
           <Property Type="String" Name="ProductName" Nullable="false" MaxLength="40" />
@@ -1414,6 +1358,54 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
           <Property Type="String" Name="TenMostExpensiveProducts" Nullable="false" MaxLength="40" />
           <Property Type="Decimal" Name="UnitPrice" Nullable="true" Precision="19" />
         </ComplexType>
+        <EntityType Name="CustomerCustomerDemo">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="String" Nullable="false" MaxLength="5" FixedLength="true" Unicode="true" />
+          <Property Name="CustomerTypeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CustomerDemographic" Relationship="MVCNetModel.FK_CustomerCustomerDemo_CustomerDemographics" FromRole="CustomerCustomerDemo" ToRole="CustomerDemographic" />
+        </EntityType>
+        <EntityType Name="CustomerDemographic">
+          <Key>
+            <PropertyRef Name="CustomerTypeID" />
+          </Key>
+          <Property Name="CustomerTypeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CustomerCustomerDemoes" Relationship="MVCNetModel.FK_CustomerCustomerDemo_CustomerDemographics" FromRole="CustomerDemographic" ToRole="CustomerCustomerDemo" />
+        </EntityType>
+        <Association Name="FK_CustomerCustomerDemo_CustomerDemographics">
+          <End Type="MVCNetModel.CustomerDemographic" Role="CustomerDemographic" Multiplicity="1" />
+          <End Type="MVCNetModel.CustomerCustomerDemo" Role="CustomerCustomerDemo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerDemographic">
+              <PropertyRef Name="CustomerTypeID" />
+            </Principal>
+            <Dependent Role="CustomerCustomerDemo">
+              <PropertyRef Name="CustomerTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Region">
+          <Key>
+            <PropertyRef Name="RegionID" />
+          </Key>
+          <Property Name="RegionID" Type="Int32" Nullable="false" />
+          <Property Name="RegionDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Territories" Relationship="MVCNetModel.FK_Territories_Region" FromRole="Region" ToRole="Territory" />
+        </EntityType>
+        <Association Name="FK_Territories_Region">
+          <End Type="MVCNetModel.Region" Role="Region" Multiplicity="1" />
+          <End Type="MVCNetModel.Territory" Role="Territory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Region">
+              <PropertyRef Name="RegionID" />
+            </Principal>
+            <Dependent Role="Territory">
+              <PropertyRef Name="RegionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1430,17 +1422,10 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerDemographics">
-            <EntityTypeMapping TypeName="MVCNetModel.CustomerDemographic">
-              <MappingFragment StoreEntitySet="CustomerDemographics">
-                <ScalarProperty Name="CustomerTypeID" ColumnName="CustomerTypeID" />
-                <ScalarProperty Name="CustomerDesc" ColumnName="CustomerDesc" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="MVCNetModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="CustomTypeID" ColumnName="CustomTypeID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="ContactName" ColumnName="ContactName" />
@@ -1523,14 +1508,6 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
                 <ScalarProperty Name="UnitsOnOrder" ColumnName="UnitsOnOrder" />
                 <ScalarProperty Name="ReorderLevel" ColumnName="ReorderLevel" />
                 <ScalarProperty Name="Discontinued" ColumnName="Discontinued" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Regions">
-            <EntityTypeMapping TypeName="MVCNetModel.Region">
-              <MappingFragment StoreEntitySet="Region">
-                <ScalarProperty Name="RegionID" ColumnName="RegionID" />
-                <ScalarProperty Name="RegionDescription" ColumnName="RegionDescription" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1758,14 +1735,6 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="CustomerCustomerDemo" TypeName="MVCNetModel.CustomerCustomerDemo" StoreEntitySet="CustomerCustomerDemo">
-            <EndProperty Name="CustomerDemographics">
-              <ScalarProperty Name="CustomerTypeID" ColumnName="CustomerTypeID" />
-            </EndProperty>
-            <EndProperty Name="Customers">
-              <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-            </EndProperty>
-          </AssociationSetMapping>
           <AssociationSetMapping Name="EmployeeTerritories" TypeName="MVCNetModel.EmployeeTerritories" StoreEntitySet="EmployeeTerritories">
             <EndProperty Name="Employees">
               <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
@@ -1841,6 +1810,30 @@ warning 6002: The table/view 'MVCNet.dbo.Summary of Sales by Year' does not have
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="CustomerCustomerDemoes">
+            <EntityTypeMapping TypeName="MVCNetModel.CustomerCustomerDemo">
+              <MappingFragment StoreEntitySet="CustomerCustomerDemo">
+                <ScalarProperty Name="CustomerTypeID" ColumnName="CustomerTypeID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerDemographics">
+            <EntityTypeMapping TypeName="MVCNetModel.CustomerDemographic">
+              <MappingFragment StoreEntitySet="CustomerDemographics">
+                <ScalarProperty Name="CustomerDesc" ColumnName="CustomerDesc" />
+                <ScalarProperty Name="CustomerTypeID" ColumnName="CustomerTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Regions">
+            <EntityTypeMapping TypeName="MVCNetModel.Region">
+              <MappingFragment StoreEntitySet="Region">
+                <ScalarProperty Name="RegionDescription" ColumnName="RegionDescription" />
+                <ScalarProperty Name="RegionID" ColumnName="RegionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -66,7 +66,7 @@
                     <div class="mb-3 row">
                         @Html.LabelFor(model => model.Region, htmlAttributes: new { @class = "col-md-3 col-form-label" })
                         <div class="col-md-9">
-                            @Html.EditorFor(model => model.Region, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.DropDownList("Region", (SelectList)ViewBag.RegionList, "-- Select Region --", new { @class = "form-select" })
                             @Html.ValidationMessageFor(model => model.Region, "", new { @class = "text-danger" })
                         </div>
                     </div>

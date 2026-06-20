@@ -27,7 +27,8 @@ namespace WebMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
+            Customer customer = db.Customers
+                .FirstOrDefault(c => c.CustomerID == id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -38,6 +39,7 @@ namespace WebMVC.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
+            PopulateDropdowns();
             return View();
         }
 
@@ -55,6 +57,7 @@ namespace WebMVC.Controllers
                 return RedirectToAction("Index");
             }
 
+            PopulateDropdowns(customer);
             return View(customer);
         }
 
@@ -65,11 +68,13 @@ namespace WebMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
+            Customer customer = db.Customers
+                .FirstOrDefault(c => c.CustomerID == id);
             if (customer == null)
             {
                 return HttpNotFound();
             }
+            PopulateDropdowns(customer);
             return View(customer);
         }
 
@@ -82,10 +87,16 @@ namespace WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
+                var existingCustomer = db.Customers
+                    .Single(c => c.CustomerID == customer.CustomerID);
+
+                db.Entry(existingCustomer).CurrentValues.SetValues(customer);
+                
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            PopulateDropdowns(customer);
             return View(customer);
         }
 
@@ -113,6 +124,15 @@ namespace WebMVC.Controllers
             db.Customers.Remove(customer);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private void PopulateDropdowns(Customer customer = null)
+        {
+            var regions = db.Regions
+                .Select(r => r.RegionDescription.Trim())
+                .OrderBy(r => r)
+                .ToList();
+            ViewBag.RegionList = new SelectList(regions, customer?.Region);
         }
 
         protected override void Dispose(bool disposing)

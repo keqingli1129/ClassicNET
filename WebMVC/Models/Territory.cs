@@ -24,8 +24,8 @@ namespace WebMVC.Models
         public string TerritoryDescription { get; set; }
         public int RegionID { get; set; }
     
-        public virtual Region Region { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Employee> Employees { get; set; }
+        public virtual Region Region { get; set; }
     }
 }
