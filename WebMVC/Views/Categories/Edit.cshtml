@@ -10,7 +10,7 @@
     <div class="col-md-8">
         <div class="card shadow-sm">
             <div class="card-body">
-                @using (Html.BeginForm())
+                @using (Html.BeginForm("Edit", "Categories", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
@@ -29,6 +29,20 @@
                         <div class="col-md-9">
                             @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-md-3 col-form-label">Picture</label>
+                        <div class="col-md-9">
+                            @if (Model.Picture != null && Model.Picture.Length > 0)
+                            {
+                                <div class="mb-2">
+                                    <img src="@Html.GetPictureDataUri(Model.Picture)" alt="Category Picture" class="img-thumbnail" style="max-height: 150px;" />
+                                </div>
+                            }
+                            <input type="file" name="pictureFile" accept="image/*" class="form-control" />
+                            <small class="text-muted">Leave empty to keep the current picture.</small>
                         </div>
                     </div>
 

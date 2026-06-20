@@ -135,6 +135,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PictureHelper.cs" />
     <Compile Include="Models\Alphabetical_list_of_product.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>

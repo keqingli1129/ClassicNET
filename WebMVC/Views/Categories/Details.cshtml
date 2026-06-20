@@ -4,6 +4,26 @@
     ViewBag.Title = "Category Details";
 }
 
+@functions {
+    // Northwind seed images have a 78-byte OLE header before the actual BMP data.
+    private static readonly int OleHeaderLength = 78;
+
+    public string GetPictureBase64(byte[] picture)
+    {
+        if (picture == null || picture.Length == 0) return null;
+
+        // Check for OLE header: skip first 78 bytes if the image starts with the OLE signature.
+        if (picture.Length > OleHeaderLength && picture[0] == 0x15 && picture[1] == 0x1C)
+        {
+            var imageData = new byte[picture.Length - OleHeaderLength];
+            Array.Copy(picture, OleHeaderLength, imageData, 0, imageData.Length);
+            return Convert.ToBase64String(imageData);
+        }
+
+        return Convert.ToBase64String(picture);
+    }
+}
+
 <h2 class="mb-4">Category Details</h2>
 
 <div class="row">
@@ -19,6 +39,19 @@
                         <tr>
                             <th class="text-muted">@Html.DisplayNameFor(model => model.Description)</th>
                             <td>@Html.DisplayFor(model => model.Description)</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">Picture</th>
+                            <td>
+                                @if (Model.Picture != null && Model.Picture.Length > 0)
+                                {
+                                    <img src="data:image/bmp;base64,@GetPictureBase64(Model.Picture)" alt="Category Picture" class="img-thumbnail" style="max-height: 200px;" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No picture</span>
+                                }
+                            </td>
                         </tr>
                     </tbody>
                 </table>

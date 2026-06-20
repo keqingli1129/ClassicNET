@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -162,8 +163,16 @@ namespace WebMVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CategoryID,CategoryName,Description,Picture")] Category category)
+        public ActionResult Create([Bind(Include = "CategoryID,CategoryName,Description")] Category category, HttpPostedFileBase pictureFile)
         {
+            if (pictureFile != null && pictureFile.ContentLength > 0)
+            {
+                using (var reader = new BinaryReader(pictureFile.InputStream))
+                {
+                    category.Picture = reader.ReadBytes(pictureFile.ContentLength);
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
@@ -194,8 +203,25 @@ namespace WebMVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CategoryID,CategoryName,Description,Picture")] Category category)
+        public ActionResult Edit([Bind(Include = "CategoryID,CategoryName,Description")] Category category, HttpPostedFileBase pictureFile)
         {
+            if (pictureFile != null && pictureFile.ContentLength > 0)
+            {
+                using (var reader = new BinaryReader(pictureFile.InputStream))
+                {
+                    category.Picture = reader.ReadBytes(pictureFile.ContentLength);
+                }
+            }
+            else
+            {
+                // Keep the existing picture when no new file is uploaded.
+                var existing = db.Categories.AsNoTracking().FirstOrDefault(c => c.CategoryID == category.CategoryID);
+                if (existing != null)
+                {
+                    category.Picture = existing.Picture;
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(category).State = EntityState.Modified;
