@@ -54,3 +54,30 @@
         </div>
     </div>
 </div>
+
+@if (ViewBag.TotalPages > 1)
+{
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+    int maxVisible = 6;
+    int startPage = Math.Max(1, currentPage - maxVisible / 2);
+    int endPage = Math.Min(totalPages, startPage + maxVisible - 1);
+    startPage = Math.Max(1, endPage - maxVisible + 1);
+
+    <nav aria-label="Customers pagination" class="mt-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                @Html.ActionLink("<<", "Index", new { page = currentPage - 1 }, new { @class = "page-link" })
+            </li>
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    @Html.ActionLink(i.ToString(), "Index", new { page = i }, new { @class = "page-link" })
+                </li>
+            }
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                @Html.ActionLink(">>", "Index", new { page = currentPage + 1 }, new { @class = "page-link" })
+            </li>
+        </ul>
+    </nav>
+}
