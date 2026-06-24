@@ -143,6 +143,7 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CategoryMetadata.cs" />
+    <Compile Include="Models\OrderMetadata.cs" />
     <Compile Include="Models\Category_Sales_for_1997.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
