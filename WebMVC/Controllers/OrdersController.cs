@@ -50,6 +50,7 @@ namespace WebMVC.Controllers
         // GET: Orders/Create
         public ActionResult Create()
         {
+            PopulateDropdowns();
             return View();
         }
 
@@ -67,6 +68,7 @@ namespace WebMVC.Controllers
                 return RedirectToAction("Index");
             }
 
+            PopulateDropdowns(order);
             return View(order);
         }
 
@@ -82,6 +84,7 @@ namespace WebMVC.Controllers
             {
                 return HttpNotFound();
             }
+            PopulateDropdowns(order);
             return View(order);
         }
 
@@ -98,6 +101,7 @@ namespace WebMVC.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            PopulateDropdowns(order);
             return View(order);
         }
 
@@ -125,6 +129,15 @@ namespace WebMVC.Controllers
             db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private void PopulateDropdowns(Order order = null)
+        {
+            var regions = db.Regions
+                .Select(r => r.RegionDescription.Trim())
+                .OrderBy(r => r)
+                .ToList();
+            ViewBag.RegionList = new SelectList(regions, order?.ShipRegion);
         }
 
         protected override void Dispose(bool disposing)

@@ -99,7 +99,7 @@
                     <div class="mb-3 row">
                         @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "col-md-3 col-form-label" })
                         <div class="col-md-9">
-                            @Html.EditorFor(model => model.ShipRegion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.DropDownList("ShipRegion", (SelectList)ViewBag.RegionList, "-- Select Region --", new { @class = "form-select" })
                             @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
                         </div>
                     </div>
