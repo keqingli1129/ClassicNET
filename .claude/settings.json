@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "mssql": {
+      "command": "python",
+      "args": ["-m", "mssql_mcp_server"],
+      "env": {
+        "MSSQL_SERVER": "localhost\\SQLEXPRESS",
+        "MSSQL_DATABASE": "MVCNet",
+        "MSSQL_WINDOWS_AUTH": "true"
+      }
+    }
+  }
+}
